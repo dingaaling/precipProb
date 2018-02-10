@@ -5,8 +5,8 @@ import numpy as np
 def partition(count):
     indices = np.arange(count)
     np.random.shuffle(indices)
-    trainInd, valInd, testInd = indices[:8000], indices[8000:14000], indices[14000:]
-    return indices, trainInd, valInd, testInd
+    trainInd, testInd, valInd = indices[:8000], indices[8000:14000], indices[14000:]
+    return indices, trainInd, testInd, valInd
 
 # Count number of files
 def fileCount(dataPath):
@@ -27,8 +27,8 @@ def createTxt(filename, indices):
 if __name__ == '__main__':
     dataPath = "precip_prob_data"
     numFiles = fileCount(dataPath)
-    indices, trainInd, valInd, testInd = partition(numFiles)
-    print(indices.shape, trainInd.shape, valInd.shape, testInd.shape)
+    indices, trainInd, testInd, valInd = partition(numFiles)
+    print(indices.shape, trainInd.shape, testInd.shape, valInd.shape)
 
     createTxt("indices.txt", indices)
     createTxt("trainIndices.txt", trainInd)
