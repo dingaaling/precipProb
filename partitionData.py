@@ -1,36 +1,48 @@
-import os, sys
+import os
 import numpy as np
+import pandas as pd
 
-# Partition training (8000), validation (2144), and testing (6000) dataset
-def partition(count):
-    indices = np.arange(count)
-    np.random.shuffle(indices)
-    trainInd, testInd, valInd = indices[:8000], indices[8000:14000], indices[14000:]
-    return indices, trainInd, testInd, valInd
 
-# Count number of files
-def fileCount(dataPath):
-    count=0
-    for csv in os.listdir(dataPath):
-        if(not(csv.startswith("."))):
-            count+=1
-    return count
+dataPath = "precip_prob_data"
 
-def createTxt(filename, indices):
+for i, csvFile in enumerate(os.listdir(dataPath)):
 
-    file = open(filename, "w", errors="ignore")
+    if (not(csvFile.startswith("."))):
 
-    for ind in indices:
-        ind = str(ind)
-        file.write(ind + "\n")
+        print(i, csvFile)
+        filePath = os.path.join(dataPath, str(csvFile))
 
-if __name__ == '__main__':
-    dataPath = "precip_prob_data"
-    numFiles = fileCount(dataPath)
-    indices, trainInd, testInd, valInd = partition(numFiles)
-    print(indices.shape, trainInd.shape, testInd.shape, valInd.shape)
+        if i == 0:
+            trainData = pd.read_csv(filePath)
+            trainData = trainData[:-1]
 
-    createTxt("indices.txt", indices)
-    createTxt("trainIndices.txt", trainInd)
-    createTxt("valIndices.txt", valInd)
-    createTxt("testIndices.txt", testInd)
+        elif (i > 0 and i < 8001):
+            csvData = pd.read_csv(filePath)
+            csvData = csvData[:-1]
+            trainData = pd.concat([trainData, csvData])
+
+        elif i == 8001:
+            testData = pd.read_csv(filePath)
+            testData = testData[:-1]
+
+        elif (i > 8001 and i < 14001):
+            csvData = pd.read_csv(filePath)
+            csvData = csvData[:-1]
+            testData = pd.concat([testData, csvData])
+
+        elif i == 14001:
+            valData = pd.read_csv(filePath)
+            valData = valData[:-1]
+
+        else:
+            csvData = pd.read_csv(filePath)
+            csvData = csvData[:-1]
+            valData = pd.concat([valData, csvData])
+
+print("Train Data: ", trainData.shape)
+print("Test Data: ", testData.shape)
+print("Val Data: ", valData.shape)
+
+trainData.iloc[:,1:].to_csv("trainData.csv")
+testData.iloc[:,1:].to_csv("testData.csv")
+valData.iloc[:,1:].to_csv("valData.csv")
