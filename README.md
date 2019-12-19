@@ -2,19 +2,26 @@
 
 This project uses the DarkSky dataset of 16,144 7-day hourly forecast weather data to generate models that predict the precipitation probability for a given "n" number of hours. <br>
 
-For testing purposes, the dataset was randomly split into 8,000 training, 6,000 testing, and 2,144 validation csv sample sets. From these sets, hourly forecast data is aggregated into trainData.csv, valData.csv, and testData.csv. <br>
+For testing purposes, the dataset was randomly split into 8,000 training, 6,000 testing, and 2,144 validation csv sample sets. From these sets, hourly forecast data is aggregated into `trainData.csv`, `valData.csv`, and `testData.csv`. <br>
 
-The "final" folder contains the methods necessary to implement precipitation prediction. The user sets parameters in inputFile.txt for the name of the csv file with the testing data desired, the "n" number of hours included in the precipitation prediction, and the kind of feature descriptor for the data. Options include all of the forecast features, a precipitation probability count distribution, and simply the list of precipitation probabilities. <br>
+The "final" folder contains the methods necessary to implement precipitation prediction. The user sets parameters in `inputFile.txt` for the name of the csv file with the testing data desired, the "n" number of hours included in the precipitation prediction, and the kind of feature descriptor for the data. Options include all of the forecast features, a precipitation probability count distribution, and simply the list of precipitation probabilities. <br>
 
 The "n" number of hours specifies the time range for the precipitation probability prediction. The "n" should be an integer in the range of 1 to 168, inclusive. An "n" larger than 168 shouldn't be chosen as that would cause data from different weather stations to overlap. Based on the "n" provided, the features will be re-grouped to fit that size. The labels (actual precipitation results, or didPrecip in the dataset) will also be grouped and if there was precipitation in that time range, the label for the group will be 1. Otherwise it will be 0. <br>
 
 Finally, based on the feature type, different models will be applied to calculate the precipitation probability. For all forecast and probability distribution feature types, three supervised machine learning models are implemented: Logistic Regression, Multi-Layer Perceptron, and Random Forest. These are implemented using the Sci-kit Learn library and return prediction and display score and mean squared error. For the probability list feature, basic statistical methods are used: maximum, joint, and average. These display mean squared error. For all feature/model types, the three prediction results from the three different models are averaged to generate a final precipitation prediction probability which is saved to the variable precipProbPred and printed to the console. <br>
 
-TestResults.jpg has quantified results, but some interesting notes: <br>
+`TestResults.jpg` has quantified results, but some interesting notes: <br>
 1. n = 1 produced the highest levels of accuracy, and by n=24, accuracy had dropped about 10% for ML models
-2. Baseline statistical models tend to overemphasize probability (although joint probability diminishes rapidly as "n" increases). However, their MSE was still comparable to the ML-trained models <br>
+2. Baseline statistical models tend to overemphasize probability (although joint probability diminishes rapidly as "n" increases). However, their Mean Squared Error (MSE) was still comparable to the ML-trained models <br>
 3. Random Forest tended to outperform in experimentation, but MLP performed slightly better in testing. <br>
 4. Averaging the results of all three models uniformly reduced MSE and served as a weak form of boosting <br>
+
+#### Output Format
+
+```
+[Model Type] [Feature Type] [Time Interval (hours)]
+Model Score: [Correct (out of 1)] MSE: [Mean Squared Error]
+```
 
 Default parameters (Supervised Model + allFeatures) were chosen because they produced the lowest MSE.
 
@@ -22,7 +29,7 @@ Future investigations: <br>
 1. Weighted boosting for different features and models, depending on their accuracy in different situations. <br>
 2. Increase dataset and implement LSTM RNN, which may increase accuracy for larger "n" tests <br>
 
-## Final Method
+## Final Method - Documentation
 
 ### precipProp.py
 Main method to predict probability of precipitation in a given time range <br>
@@ -40,7 +47,7 @@ Parameters for the prediction model <br>
    -allFeatures: all of the 7 forecast features for each hour are used <br>
    -probDistrFeatures: a probability distribution bag of words vector is generated for the precipitation probabilities <br>
    -probList: list of precipitation probabilities <br>
-Examples for inputFile.txt: <br>
+Examples for `inputFile.txt`: <br>
 
 *Default Parameters* <br>
 testData.csv <br>
@@ -73,7 +80,7 @@ Functions to apply different models to make precipitation probability <br>
 Splits the 16144-length dataset randomly into training (8000), testing (6000), and validation (2214) <br>
 Can be used to generate a new random set of trainData, testData, and valData
 
-## Exploratory
+## Exploratory - Documentation
 
 ### TestResults.jpg
 Accuracy and mean-squared error scores of each model for n = 1, 12, 24, and 48 :<br>
