@@ -41,7 +41,7 @@ If you would like the model scores and errors to not be printed, find the printS
 
 ### inputFile.txt
 Parameters for the prediction model <br>
-1. Name of test file (ex. testData.csv) <br>
+1. Name of test file (ex. `testData.csv`) <br>
 2. Size of prediction grouping (ex. 48, meaning precipitation probability for a 48-hour range. Must be integer 1 or larger) <br>
 3. Feature type: <br>
    -allFeatures: all of the 7 forecast features for each hour are used <br>
@@ -49,22 +49,28 @@ Parameters for the prediction model <br>
    -probList: list of precipitation probabilities <br>
 Examples for `inputFile.txt`: <br>
 
-*Default Parameters* <br>
+**Default Parameters** <br>
+```
 testData.csv <br>
 24 <br>
 allFeatures <br>
+```
 
-*Example 1 Parameters* <br>
+**Example 1 Parameters** <br>
+```
 sampleData.csv <br>
 48 <br>
 probDistrFeatures <br>
+```
 
 These are the parameters chosen for demo because they show clearly the prediction probability for a 48-hour time range. <br>
 
-*Example 2 Parameters* <br>
+**Example 2 Parameters** <br>
+```
 valData.csv <br>
 2 <br>
 probList <br>
+```
 
 ### dataTransforms.py
 Functions to clean, pre-process, and group feature and label data
